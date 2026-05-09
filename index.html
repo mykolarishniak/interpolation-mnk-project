@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Апроксимація функцій</title>
+
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <header>
+                <h1>Апроксимація функцій</h1>
+                <p class="subtitle">
+                    Інтерполяція та метод найменших квадратів
+                </p>
+            </header>
+
+            <div class="main-grid">
+
+                <aside class="sidebar">
+
+                    <div class="card">
+                        <h2>Вхідні дані</h2>
+
+                        <label for="points">
+                            Точки (x, y)
+                        </label>
+
+                        <textarea id="points">
+1,1.5
+2,0.8
+3,0.5
+4,0.4
+5,0.3
+                    </textarea>
+
+                        <label for="degree">
+                            Ступінь полінома МНК
+                        </label>
+
+                        <select id="degree">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+
+                        <button id="load-btn">
+                            Завантажити точки
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h2>Методи</h2>
+
+                        <div class="method-list">
+
+                            <div class="method-item">
+                                <span>Інтерполяція Лагранжа</span>
+                                <span class="status">⏳</span>
+                            </div>
+
+                            <div class="method-item">
+                                <span>Інтерполяція Ньютона</span>
+                                <span class="status">⏳</span>
+                            </div>
+
+                            <div class="method-item">
+                                <span>Метод МНК</span>
+                                <span class="status">⏳</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </aside>
+
+                <main class="content">
+
+                    <div class="card">
+                        <h2>Таблиця точок</h2>
+
+                        <div id="table-container">
+                            <p class="placeholder">
+                                Натисніть "Завантажити точки"
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Область графіка</h2>
+
+                        <div class="graph-placeholder">
+                            Графік буде реалізовано в наступних інкрементах
+                        </div>
+                    </div>
+
+                </main>
+
+            </div>
+
+        </div>
+
+        <script src="script.js"></script>
+
+    </body>
+
+</html>
