@@ -6,7 +6,6 @@
     --primary-hover: #4f46e5;
     --text: #f8fafc;
     --muted: #94a3b8;
-    --success: #22c55e;
 }
 
 * {
@@ -16,15 +15,14 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
     padding: 30px;
 }
 
 .container {
-    max-width: 1300px;
+    max-width: 1400px;
     margin: auto;
 }
 
@@ -54,6 +52,12 @@ h1 {
     gap: 20px;
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -63,30 +67,12 @@ h1 {
 
 .card h2 {
     margin-bottom: 20px;
-    font-size: 22px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    margin-top: 15px;
-    color: var(--muted);
 }
 
 textarea {
     width: 100%;
     height: 180px;
     resize: none;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: #020617;
-    color: white;
-    font-size: 15px;
-}
-
-select {
-    width: 100%;
     padding: 12px;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -112,58 +98,9 @@ button:hover {
     background: var(--primary-hover);
 }
 
-.method-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.method-item {
-    background: #0f172a;
-    border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 10px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.status {
-    color: #facc15;
-    font-size: 18px;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.placeholder {
-    text-align: center;
-    color: var(--muted);
-    padding: 30px;
-}
-
-.graph-placeholder {
-    height: 350px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-
-    color: var(--muted);
-    font-size: 18px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
 }
 
 th,
@@ -177,15 +114,32 @@ th {
     background: #0f172a;
 }
 
-tr:hover {
-    background: rgba(255,255,255,0.03);
+.placeholder {
+    color: var(--muted);
+    text-align: center;
+    padding: 20px;
+}
+
+#chart {
+    width: 100%;
+    height: 450px;
+}
+
+.polynomial-box {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    line-height: 1.7;
+    overflow-x: auto;
 }
 
 .fade {
-    animation: fade 0.4s ease;
+    animation: fade 0.5s ease;
 }
 
 @keyframes fade {
+
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -195,6 +149,7 @@ tr:hover {
         opacity: 1;
         transform: translateY(0);
     }
+
 }
 
 @media(max-width: 900px) {

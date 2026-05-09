@@ -1,6 +1,8 @@
-const loadBtn = document.getElementById("load-btn");
+const buildBtn = document.getElementById("build-btn");
 
-loadBtn.addEventListener("click", () => {
+let chart = null;
+
+buildBtn.addEventListener("click", () => {
 
     const points = parsePoints();
 
@@ -10,6 +12,12 @@ loadBtn.addEventListener("click", () => {
     }
 
     renderTable(points);
+
+    const polynomial = buildLagrangePolynomial(points);
+
+    renderPolynomial(polynomial);
+
+    buildGraph(points);
 
 });
 
@@ -32,10 +40,7 @@ function parsePoints() {
 
         if (!isNaN(x) && !isNaN(y)) {
 
-            points.push({
-                x,
-                y
-            });
+            points.push({ x, y });
 
         }
 
@@ -87,4 +92,185 @@ function renderTable(points) {
     `;
 
     container.innerHTML = html;
+}
+
+function lagrangeInterpolation(points, x) {
+
+    let result = 0;
+
+    for (let i = 0; i < points.length; i++) {
+
+        let term = points[i].y;
+
+        for (let j = 0; j < points.length; j++) {
+
+            if (i !== j) {
+
+                term *=
+                    (x - points[j].x) /
+                    (points[i].x - points[j].x);
+
+            }
+
+        }
+
+        result += term;
+
+    }
+
+    return result;
+}
+
+function buildLagrangePolynomial(points) {
+
+    let formula = "L(x) = ";
+
+    for (let i = 0; i < points.length; i++) {
+
+        let part = `${points[i].y.toFixed(2)}`;
+
+        for (let j = 0; j < points.length; j++) {
+
+            if (i !== j) {
+
+                part += `
+                ((x - ${points[j].x}) / (${points[i].x} - ${points[j].x}))
+                `;
+
+            }
+
+        }
+
+        formula += part;
+
+        if (i !== points.length - 1) {
+            formula += " + ";
+        }
+
+    }
+
+    return formula;
+}
+
+function renderPolynomial(polynomial) {
+
+    const area = document.getElementById("result-area");
+
+    area.innerHTML = `
+
+        <div class="polynomial-box fade">
+            ${polynomial}
+        </div>
+
+    `;
+}
+
+function buildGraph(points) {
+
+    const graphData = [];
+
+    const minX = Math.min(...points.map(p => p.x));
+    const maxX = Math.max(...points.map(p => p.x));
+
+    for (let x = minX; x <= maxX; x += 0.05) {
+
+        graphData.push({
+            x: x,
+            y: lagrangeInterpolation(points, x)
+        });
+
+    }
+
+    const ctx = document.getElementById("chart");
+
+    if (chart) {
+        chart.destroy();
+    }
+
+    chart = new Chart(ctx, {
+
+        type: "line",
+
+        data: {
+
+            datasets: [
+
+                {
+                    label: "Поліном Лагранжа",
+
+                    data: graphData,
+
+                    parsing: false,
+
+                    borderWidth: 3,
+
+                    tension: 0.2
+                },
+
+                {
+                    label: "Вузли",
+
+                    data: points,
+
+                    type: "scatter",
+
+                    pointRadius: 6
+                }
+
+            ]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            animation: {
+                duration: 1500
+            },
+
+            plugins: {
+
+                legend: {
+                    labels: {
+                        color: "white"
+                    }
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+    type: "linear",
+
+    ticks: {
+        color: "white"
+    },
+
+    grid: {
+        color: "#334155"
+    }
+
+},
+
+                y: {
+
+                    ticks: {
+                        color: "white"
+                    },
+
+                    grid: {
+                        color: "#334155"
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
 }
