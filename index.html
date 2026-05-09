@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="uk">
 
     <head>
@@ -70,6 +70,127 @@
                         <h2>Таблиця точок</h2>
 
                         <div id="table-container">
+
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+
+                        <h2>Графік</h2>
+
+                        <canvas id="chart"></canvas>
+
+                    </div>
+
+                </main>
+
+            </div>
+
+        </div>
+
+        <script src="script.js"></script>
+
+    </body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="uk">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Інтерполяція функцій</title>
+
+        <link rel="stylesheet" href="style.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <header>
+                <h1>Апроксимація функцій</h1>
+
+                <p class="subtitle">
+                    Інтерполяція Лагранжа та Ньютона
+                </p>
+            </header>
+
+            <div class="main-grid">
+
+                <aside class="sidebar">
+
+                    <div class="card">
+
+                        <h2>Вхідні дані</h2>
+
+                        <label>Точки (x, y)</label>
+
+                        <textarea id="points">
+1,1.5
+2,0.8
+3,0.5
+4,0.4
+5,0.3
+                    </textarea>
+
+                        <label>Метод</label>
+
+                        <select id="method">
+                            <option value="lagrange">
+                                Поліном Лагранжа
+                            </option>
+
+                            <option value="newton">
+                                Поліном Ньютона
+                            </option>
+                        </select>
+
+                        <button id="build-btn">
+                            Побудувати
+                        </button>
+
+                    </div>
+
+                    <div class="card">
+
+                        <h2>Поліном</h2>
+
+                        <div id="result-area">
+
+                            <p class="placeholder">
+                                Поліном ще не побудовано
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </aside>
+
+                <main class="content">
+
+                    <div class="card">
+
+                        <h2>Таблиця точок</h2>
+
+                        <div id="table-container"></div>
+
+                    </div>
+
+                    <div class="card">
+
+                        <h2>Таблиця поділених різниць</h2>
+
+                        <div id="differences-container">
+
+                            <p class="placeholder">
+                                Побудуйте поліном Ньютона
+                            </p>
 
                         </div>
 
