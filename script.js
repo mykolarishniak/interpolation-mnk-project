@@ -348,11 +348,71 @@ function buildCustomGraph(
     const ctx =
         document.getElementById(canvasId);
 
-        if (Chart.getChart(ctx)) {
+    if (Chart.getChart(ctx)) {
 
-    Chart.getChart(ctx).destroy();
+        Chart.getChart(ctx).destroy();
 
-}
+    }
+
+    let datasets = [
+
+        {
+            label:
+                method === "lagrange"
+                    ? "Поліном Лагранжа"
+                    : method === "newton"
+                        ? "Поліном Ньютона"
+                        : "МНК",
+
+            data: graphData,
+
+            parsing: false,
+
+            borderWidth: 3,
+
+            tension: 0.2
+        },
+
+        {
+            label: "Вузли",
+
+            data: points,
+
+            type: "scatter",
+
+            pointRadius: 6
+        }
+
+    ];
+
+    if (method === "leastSquares") {
+
+        datasets.push({
+
+            label: "Залишки",
+
+            type: "line",
+
+            data: points.map(point => ({
+
+                x: point.x,
+
+                y: leastSquaresValue(
+                    coefficients,
+                    point.x
+                )
+
+            })),
+
+            borderDash: [5, 5],
+
+            borderWidth: 2,
+
+            pointRadius: 0
+
+        });
+
+    }
 
     new Chart(ctx, {
 
@@ -360,40 +420,15 @@ function buildCustomGraph(
 
         data: {
 
-            datasets: [
-
-                {
-                    label:
-                        method === "lagrange"
-                            ? "Поліном Лагранжа"
-                            : method === "newton"
-                                ? "Поліном Ньютона"
-                                : "МНК",
-
-                    data: graphData,
-
-                    parsing: false,
-
-                    borderWidth: 3,
-
-                    tension: 0.2
-                },
-
-                {
-                    label: "Вузли",
-
-                    data: points,
-
-                    type: "scatter",
-
-                    pointRadius: 6
-                }
-
-            ]
+            datasets: datasets
 
         },
 
         options: {
+
+            animation: {
+                duration: 2500
+            },
 
             responsive: true,
 
@@ -960,3 +995,86 @@ function renderCustomTable(points, containerId) {
 
 }
 
+function clearCanvas(canvasId) {
+
+    const canvas = document.getElementById(canvasId);
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+}
+
+function clearLagrange() {
+
+    document.getElementById(
+        "lagrange-result"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Поліном ще не побудовано
+        </p>
+
+    `;
+
+    document.getElementById(
+        "lagrange-table"
+    ).innerHTML = "";
+
+    clearCanvas("lagrange-chart");
+
+}
+
+function clearNewton() {
+
+    document.getElementById(
+        "newton-result"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Поліном ще не побудовано
+        </p>
+
+    `;
+
+    document.getElementById(
+        "newton-table"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "differences-container"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Побудуйте поліном Ньютона
+        </p>
+
+    `;
+
+    clearCanvas("newton-chart");
+
+}
+
+function clearLeastSquares() {
+
+    document.getElementById(
+        "least-result"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Поліном ще не побудовано
+        </p>
+
+    `;
+
+    document.getElementById(
+        "least-table"
+    ).innerHTML = "";
+
+    clearMatrix();
+
+    clearResiduals();
+
+    clearCanvas("least-chart");
+
+}
