@@ -947,6 +947,13 @@ function parseCustomPoints(textareaId) {
         }
 
     }
+    if (points.length < 2) {
+
+    alert("Потрібно мінімум 2 точки!");
+
+    return [];
+
+}
 
     return points;
 
