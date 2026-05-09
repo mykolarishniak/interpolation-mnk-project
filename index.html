@@ -1,107 +1,10 @@
-<!-- <!DOCTYPE html>
-<html lang="uk">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Інтерполяція Лагранжа</title>
-
-        <link rel="stylesheet" href="style.css">
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    </head>
-
-    <body>
-
-        <div class="container">
-
-            <header>
-                <h1>Апроксимація функцій</h1>
-
-                <p class="subtitle">
-                    Інтерполяція поліномом Лагранжа
-                </p>
-            </header>
-
-            <div class="main-grid">
-
-                <aside class="sidebar">
-
-                    <div class="card">
-
-                        <h2>Вхідні дані</h2>
-
-                        <label>Точки (x, y)</label>
-
-                        <textarea id="points">
-1,1.5
-2,0.8
-3,0.5
-4,0.4
-5,0.3
-                    </textarea>
-
-                        <button id="build-btn">
-                            Побудувати поліном
-                        </button>
-
-                    </div>
-
-                    <div class="card">
-
-                        <h2>Результат</h2>
-
-                        <div id="result-area">
-
-                            <p class="placeholder">
-                                Поліном ще не побудовано
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </aside>
-
-                <main class="content">
-
-                    <div class="card">
-
-                        <h2>Таблиця точок</h2>
-
-                        <div id="table-container">
-
-                        </div>
-
-                    </div>
-
-                    <div class="card">
-
-                        <h2>Графік</h2>
-
-                        <canvas id="chart"></canvas>
-
-                    </div>
-
-                </main>
-
-            </div>
-
-        </div>
-
-        <script src="script.js"></script>
-
-    </body>
-
-</html> -->
-
 <!DOCTYPE html>
 <html lang="uk">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Інтерполяція функцій</title>
+        <title>Апроксимація функцій</title>
 
         <link rel="stylesheet" href="style.css">
 
@@ -113,100 +16,274 @@
         <div class="container">
 
             <header>
+
                 <h1>Апроксимація функцій</h1>
 
                 <p class="subtitle">
-                    Інтерполяція Лагранжа та Ньютона
+                    Інтерполяція Лагранжа, Ньютона та МНК
                 </p>
+
             </header>
 
-            <div class="main-grid">
 
-                <aside class="sidebar">
+            <div class="tabs">
 
-                    <div class="card">
+                <button class="tab-btn active" data-tab="lagrange">
+                    Лагранж
+                </button>
 
-                        <h2>Вхідні дані</h2>
+                <button class="tab-btn" data-tab="newton">
+                    Ньютон
+                </button>
 
-                        <label>Точки (x, y)</label>
+                <button class="tab-btn" data-tab="least">
+                    МНК
+                </button>
 
-                        <textarea id="points">
+            </div>
+
+
+            <section class="tab-content active" id="lagrange">
+
+                <div class="main-grid">
+
+                    <aside class="sidebar">
+
+                        <div class="card">
+
+                            <h2>Вхідні дані</h2>
+
+                            <label>Точки (x, y)</label>
+
+                            <textarea id="lagrange-points">
 1,1.5
 2,0.8
 3,0.5
 4,0.4
 5,0.3
-                    </textarea>
+                        </textarea>
 
-                        <label>Метод</label>
-
-                        <select id="method">
-                            <option value="lagrange">
-                                Поліном Лагранжа
-                            </option>
-
-                            <option value="newton">
-                                Поліном Ньютона
-                            </option>
-                        </select>
-
-                        <button id="build-btn">
-                            Побудувати
-                        </button>
-
-                    </div>
-
-                    <div class="card">
-
-                        <h2>Поліном</h2>
-
-                        <div id="result-area">
-
-                            <p class="placeholder">
-                                Поліном ще не побудовано
-                            </p>
+                            <button onclick="buildLagrange()">
+                                Побудувати
+                            </button>
 
                         </div>
 
-                    </div>
+                        <div class="card">
 
-                </aside>
+                            <h2>Поліном Лагранжа</h2>
 
-                <main class="content">
+                            <div id="lagrange-result">
 
-                    <div class="card">
+                                <p class="placeholder">
+                                    Поліном ще не побудовано
+                                </p>
 
-                        <h2>Таблиця точок</h2>
-
-                        <div id="table-container"></div>
-
-                    </div>
-
-                    <div class="card">
-
-                        <h2>Таблиця поділених різниць</h2>
-
-                        <div id="differences-container">
-
-                            <p class="placeholder">
-                                Побудуйте поліном Ньютона
-                            </p>
+                            </div>
 
                         </div>
 
-                    </div>
+                    </aside>
 
-                    <div class="card">
+                    <main class="content">
 
-                        <h2>Графік</h2>
+                        <div class="card">
 
-                        <canvas id="chart"></canvas>
+                            <h2>Таблиця точок</h2>
 
-                    </div>
+                            <div id="lagrange-table"></div>
 
-                </main>
+                        </div>
 
-            </div>
+                        <div class="card">
+
+                            <h2>Графік</h2>
+
+                            <canvas id="lagrange-chart"></canvas>
+
+                        </div>
+
+                    </main>
+
+                </div>
+
+            </section>
+
+
+            <section class="tab-content" id="newton">
+
+                <div class="main-grid">
+
+                    <aside class="sidebar">
+
+                        <div class="card">
+
+                            <h2>Вхідні дані</h2>
+
+                            <label>Точки (x, y)</label>
+
+                            <textarea id="newton-points">
+1,1.5
+2,0.8
+3,0.5
+4,0.4
+5,0.3
+                        </textarea>
+
+                            <button onclick="buildNewton()">
+                                Побудувати
+                            </button>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Поліном Ньютона</h2>
+
+                            <div id="newton-result">
+
+                                <p class="placeholder">
+                                    Поліном ще не побудовано
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                    <main class="content">
+
+                        <div class="card">
+
+                            <h2>Таблиця точок</h2>
+
+                            <div id="newton-table"></div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Таблиця поділених різниць</h2>
+
+                            <div id="differences-container">
+
+                                <p class="placeholder">
+                                    Побудуйте поліном Ньютона
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Графік</h2>
+
+                            <canvas id="newton-chart"></canvas>
+
+                        </div>
+
+                    </main>
+
+                </div>
+
+            </section>
+
+
+            <section class="tab-content" id="least">
+
+                <div class="main-grid">
+
+                    <aside class="sidebar">
+
+                        <div class="card">
+
+                            <h2>Вхідні дані</h2>
+
+                            <label>Точки (x, y)</label>
+
+                            <textarea id="least-points">
+1,1.5
+2,0.8
+3,0.5
+4,0.4
+5,0.3
+                        </textarea>
+
+                            <button onclick="buildLeastSquares()">
+                                Побудувати
+                            </button>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Поліном МНК</h2>
+
+                            <div id="least-result">
+
+                                <p class="placeholder">
+                                    Поліном ще не побудовано
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                    <main class="content">
+
+                        <div class="card">
+
+                            <h2>Таблиця точок</h2>
+
+                            <div id="least-table"></div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Дизайн-матриця</h2>
+
+                            <div id="matrix-container">
+
+                                <p class="placeholder">
+                                    Побудуйте МНК
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Таблиця залишків</h2>
+
+                            <div id="residuals-container">
+
+                                <p class="placeholder">
+                                    Побудуйте МНК
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <h2>Графік</h2>
+
+                            <canvas id="least-chart"></canvas>
+
+                        </div>
+
+                    </main>
+
+                </div>
+
+            </section>
 
         </div>
 

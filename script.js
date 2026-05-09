@@ -1,320 +1,6 @@
-// const buildBtn = document.getElementById("build-btn");
-
-// let chart = null;
-
-// buildBtn.addEventListener("click", () => {
-
-//     const points = parsePoints();
-
-//     if (!points.length) {
-//         alert("Введіть коректні точки!");
-//         return;
-//     }
-
-//     renderTable(points);
-
-//     const polynomial = buildLagrangePolynomial(points);
-
-//     renderPolynomial(polynomial);
-
-//     buildGraph(points);
-
-// });
-
-// function parsePoints() {
-
-//     const text = document
-//         .getElementById("points")
-//         .value
-//         .trim();
-
-//     const lines = text.split("\n");
-
-//     let points = [];
-
-//     for (let line of lines) {
-
-//         const [x, y] = line
-//             .split(",")
-//             .map(Number);
-
-//         if (!isNaN(x) && !isNaN(y)) {
-
-//             points.push({ x, y });
-
-//         }
-
-//     }
-
-//     return points;
-// }
-
-// function renderTable(points) {
-
-//     const container = document.getElementById("table-container");
-
-//     let html = `
-
-//         <table class="fade">
-
-//             <thead>
-//                 <tr>
-//                     <th>#</th>
-//                     <th>x</th>
-//                     <th>y</th>
-//                 </tr>
-//             </thead>
-
-//             <tbody>
-
-//     `;
-
-//     points.forEach((point, index) => {
-
-//         html += `
-
-//             <tr>
-//                 <td>${index + 1}</td>
-//                 <td>${point.x}</td>
-//                 <td>${point.y}</td>
-//             </tr>
-
-//         `;
-
-//     });
-
-//     html += `
-
-//             </tbody>
-
-//         </table>
-
-//     `;
-
-//     container.innerHTML = html;
-// }
-
-// function lagrangeInterpolation(points, x) {
-
-//     let result = 0;
-
-//     for (let i = 0; i < points.length; i++) {
-
-//         let term = points[i].y;
-
-//         for (let j = 0; j < points.length; j++) {
-
-//             if (i !== j) {
-
-//                 term *=
-//                     (x - points[j].x) /
-//                     (points[i].x - points[j].x);
-
-//             }
-
-//         }
-
-//         result += term;
-
-//     }
-
-//     return result;
-// }
-
-// function buildLagrangePolynomial(points) {
-
-//     let formula = "L(x) = ";
-
-//     for (let i = 0; i < points.length; i++) {
-
-//         let part = `${points[i].y.toFixed(2)}`;
-
-//         for (let j = 0; j < points.length; j++) {
-
-//             if (i !== j) {
-
-//                 part += `
-//                 ((x - ${points[j].x}) / (${points[i].x} - ${points[j].x}))
-//                 `;
-
-//             }
-
-//         }
-
-//         formula += part;
-
-//         if (i !== points.length - 1) {
-//             formula += " + ";
-//         }
-
-//     }
-
-//     return formula;
-// }
-
-// function renderPolynomial(polynomial) {
-
-//     const area = document.getElementById("result-area");
-
-//     area.innerHTML = `
-
-//         <div class="polynomial-box fade">
-//             ${polynomial}
-//         </div>
-
-//     `;
-// }
-
-// function buildGraph(points) {
-
-//     const graphData = [];
-
-//     const minX = Math.min(...points.map(p => p.x));
-//     const maxX = Math.max(...points.map(p => p.x));
-
-//     for (let x = minX; x <= maxX; x += 0.05) {
-
-//         graphData.push({
-//             x: x,
-//             y: lagrangeInterpolation(points, x)
-//         });
-
-//     }
-
-//     const ctx = document.getElementById("chart");
-
-//     if (chart) {
-//         chart.destroy();
-//     }
-
-//     chart = new Chart(ctx, {
-
-//         type: "line",
-
-//         data: {
-
-//             datasets: [
-
-//                 {
-//                     label: "Поліном Лагранжа",
-
-//                     data: graphData,
-
-//                     parsing: false,
-
-//                     borderWidth: 3,
-
-//                     tension: 0.2
-//                 },
-
-//                 {
-//                     label: "Вузли",
-
-//                     data: points,
-
-//                     type: "scatter",
-
-//                     pointRadius: 6
-//                 }
-
-//             ]
-
-//         },
-
-//         options: {
-
-//             responsive: true,
-
-//             animation: {
-//                 duration: 1500
-//             },
-
-//             plugins: {
-
-//                 legend: {
-//                     labels: {
-//                         color: "white"
-//                     }
-//                 }
-
-//             },
-
-//             scales: {
-
-//                 x: {
-
-//     type: "linear",
-
-//     ticks: {
-//         color: "white"
-//     },
-
-//     grid: {
-//         color: "#334155"
-//     }
-
-// },
-
-//                 y: {
-
-//                     ticks: {
-//                         color: "white"
-//                     },
-
-//                     grid: {
-//                         color: "#334155"
-//                     }
-
-//                 }
-
-//             }
-
-//         }
-
-//     });
-
-// }
-
 const buildBtn = document.getElementById("build-btn");
 
 let chart = null;
-
-buildBtn.addEventListener("click", () => {
-
-    const points = parsePoints();
-
-    if (!points.length) {
-        alert("Введіть коректні точки!");
-        return;
-    }
-
-    renderTable(points);
-
-    const method = document.getElementById("method").value;
-
-    if (method === "lagrange") {
-
-        renderPolynomial(
-            buildLagrangePolynomial(points)
-        );
-
-        clearDifferences();
-
-        buildGraph(points, "lagrange");
-
-    } else {
-
-        const table = buildDividedDifferences(points);
-
-        renderNewtonPolynomial(table, points);
-
-        renderDifferencesTable(table);
-
-        buildGraph(points, "newton", table);
-
-    }
-
-});
 
 function parsePoints() {
 
@@ -607,12 +293,21 @@ function clearDifferences() {
     `;
 }
 
-function buildGraph(points, method, table = null) {
+function buildCustomGraph(
+    points,
+    method,
+    canvasId,
+    table = null,
+    coefficients = null
+) {
 
     const graphData = [];
 
-    const minX = Math.min(...points.map(p => p.x));
-    const maxX = Math.max(...points.map(p => p.x));
+    const minX =
+        Math.min(...points.map(p => p.x));
+
+    const maxX =
+        Math.max(...points.map(p => p.x));
 
     for (let x = minX; x <= maxX; x += 0.05) {
 
@@ -620,11 +315,29 @@ function buildGraph(points, method, table = null) {
 
         if (method === "lagrange") {
 
-            y = lagrangeInterpolation(points, x);
+            y =
+                lagrangeInterpolation(points, x);
 
-        } else {
+        }
 
-            y = newtonInterpolation(points, table, x);
+        else if (method === "newton") {
+
+            y =
+                newtonInterpolation(
+                    points,
+                    table,
+                    x
+                );
+
+        }
+
+        else {
+
+            y =
+                leastSquaresValue(
+                    coefficients,
+                    x
+                );
 
         }
 
@@ -632,13 +345,16 @@ function buildGraph(points, method, table = null) {
 
     }
 
-    const ctx = document.getElementById("chart");
+    const ctx =
+        document.getElementById(canvasId);
 
-    if (chart) {
-        chart.destroy();
-    }
+        if (Chart.getChart(ctx)) {
 
-    chart = new Chart(ctx, {
+    Chart.getChart(ctx).destroy();
+
+}
+
+    new Chart(ctx, {
 
         type: "line",
 
@@ -647,9 +363,12 @@ function buildGraph(points, method, table = null) {
             datasets: [
 
                 {
-                    label: method === "lagrange"
-                        ? "Поліном Лагранжа"
-                        : "Поліном Ньютона",
+                    label:
+                        method === "lagrange"
+                            ? "Поліном Лагранжа"
+                            : method === "newton"
+                                ? "Поліном Ньютона"
+                                : "МНК",
 
                     data: graphData,
 
@@ -678,16 +397,14 @@ function buildGraph(points, method, table = null) {
 
             responsive: true,
 
-            animation: {
-                duration: 1500
-            },
-
             plugins: {
 
                 legend: {
+
                     labels: {
                         color: "white"
                     }
+
                 }
 
             },
@@ -727,3 +444,519 @@ function buildGraph(points, method, table = null) {
     });
 
 }
+
+function leastSquares(points, degree = 2) {
+
+    const n = points.length;
+
+    let X = [];
+    let Y = [];
+
+    for (let i = 0; i < n; i++) {
+
+        let row = [];
+
+        for (let j = 0; j <= degree; j++) {
+
+            row.push(Math.pow(points[i].x, j));
+
+        }
+
+        X.push(row);
+        Y.push(points[i].y);
+
+    }
+
+    const XT = mathTranspose(X);
+
+    const XTX = mathMultiply(XT, X);
+
+    const XTY = mathMultiplyVector(XT, Y);
+
+    const coefficients = gaussianElimination(XTX, XTY);
+
+    return {
+        X,
+        coefficients
+    };
+}
+
+function mathTranspose(matrix) {
+
+    return matrix[0].map((_, colIndex) =>
+        matrix.map(row => row[colIndex])
+    );
+
+}
+
+function mathMultiply(a, b) {
+
+    let result = Array.from(
+        { length: a.length },
+        () => Array(b[0].length).fill(0)
+    );
+
+    for (let i = 0; i < a.length; i++) {
+
+        for (let j = 0; j < b[0].length; j++) {
+
+            for (let k = 0; k < b.length; k++) {
+
+                result[i][j] += a[i][k] * b[k][j];
+
+            }
+
+        }
+
+    }
+
+    return result;
+}
+
+function mathMultiplyVector(a, b) {
+
+    let result = Array(a.length).fill(0);
+
+    for (let i = 0; i < a.length; i++) {
+
+        for (let j = 0; j < b.length; j++) {
+
+            result[i] += a[i][j] * b[j];
+
+        }
+
+    }
+
+    return result;
+}
+
+function gaussianElimination(A, b) {
+
+    const n = A.length;
+
+    for (let i = 0; i < n; i++) {
+
+        let maxRow = i;
+
+        for (let k = i + 1; k < n; k++) {
+
+            if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) {
+
+                maxRow = k;
+
+            }
+
+        }
+
+        [A[i], A[maxRow]] = [A[maxRow], A[i]];
+        [b[i], b[maxRow]] = [b[maxRow], b[i]];
+
+        for (let k = i + 1; k < n; k++) {
+
+            let factor = A[k][i] / A[i][i];
+
+            for (let j = i; j < n; j++) {
+
+                A[k][j] -= factor * A[i][j];
+
+            }
+
+            b[k] -= factor * b[i];
+
+        }
+
+    }
+
+    let x = Array(n).fill(0);
+
+    for (let i = n - 1; i >= 0; i--) {
+
+        x[i] = b[i];
+
+        for (let j = i + 1; j < n; j++) {
+
+            x[i] -= A[i][j] * x[j];
+
+        }
+
+        x[i] /= A[i][i];
+
+    }
+
+    return x;
+}
+
+function leastSquaresValue(coefficients, x) {
+
+    let y = 0;
+
+    for (let i = 0; i < coefficients.length; i++) {
+
+        y += coefficients[i] * Math.pow(x, i);
+
+    }
+
+    return y;
+}
+
+function renderLeastSquares(coefficients) {
+
+    let formula = "P(x) = ";
+
+    coefficients.forEach((coef, index) => {
+
+        if (index === 0) {
+
+            formula += coef.toFixed(4);
+
+        } else {
+
+            formula += ` + (${coef.toFixed(4)})x^${index}`;
+
+        }
+
+    });
+
+    document.getElementById(
+        "least-result"
+    ).innerHTML = `
+
+        <div class="polynomial-box fade">
+            ${formula}
+        </div>
+
+    `;
+}
+
+function renderMatrix(matrix) {
+
+    let html = "<table class='fade'>";
+
+    matrix.forEach(row => {
+
+        html += "<tr>";
+
+        row.forEach(value => {
+
+            html += `<td>${value.toFixed(2)}</td>`;
+
+        });
+
+        html += "</tr>";
+
+    });
+
+    html += "</table>";
+
+    document.getElementById(
+        "matrix-container"
+    ).innerHTML = html;
+}
+
+function renderResiduals(points, coefficients) {
+
+    let html = `
+
+        <table class="fade">
+
+            <thead>
+                <tr>
+                    <th>x</th>
+                    <th>y</th>
+                    <th>ŷ</th>
+                    <th>Похибка</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+    `;
+
+    points.forEach(point => {
+
+        const predicted =
+            leastSquaresValue(coefficients, point.x);
+
+        const residual =
+            point.y - predicted;
+
+        html += `
+
+            <tr>
+                <td>${point.x}</td>
+                <td>${point.y}</td>
+                <td>${predicted.toFixed(4)}</td>
+                <td>${residual.toFixed(4)}</td>
+            </tr>
+
+        `;
+
+    });
+
+    html += "</tbody></table>";
+
+    document.getElementById(
+        "residuals-container"
+    ).innerHTML = html;
+}
+
+function clearDifferences() {
+
+    document.getElementById(
+        "differences-container"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Побудуйте поліном Ньютона
+        </p>
+
+    `;
+}
+
+function clearMatrix() {
+
+    document.getElementById(
+        "matrix-container"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Побудуйте МНК
+        </p>
+
+    `;
+}
+
+function clearResiduals() {
+
+    document.getElementById(
+        "residuals-container"
+    ).innerHTML = `
+
+        <p class="placeholder">
+            Побудуйте МНК
+        </p>
+
+    `;
+}
+
+const tabButtons = document.querySelectorAll(".tab-btn");
+
+const sections = document.querySelectorAll(".tab-content");
+
+tabButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        tabButtons.forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        const tabId = button.dataset.tab;
+
+        sections.forEach(section => {
+
+            section.classList.remove("active");
+
+            if (section.id === tabId) {
+
+                section.classList.add("active");
+
+            }
+
+        });
+
+    });
+
+});
+
+function buildLagrange() {
+
+    const points = parseCustomPoints(
+        "lagrange-points"
+    );
+
+    renderCustomTable(
+        points,
+        "lagrange-table"
+    );
+
+    const polynomial =
+        buildLagrangePolynomial(points);
+
+    document.getElementById(
+        "lagrange-result"
+    ).innerHTML = `
+
+        <div class="polynomial-box fade">
+            ${polynomial}
+        </div>
+
+    `;
+
+    buildCustomGraph(
+        points,
+        "lagrange",
+        "lagrange-chart"
+    );
+
+}
+
+function buildNewton() {
+
+    const points = parseCustomPoints(
+        "newton-points"
+    );
+
+    renderCustomTable(
+        points,
+        "newton-table"
+    );
+
+    const table =
+        buildDividedDifferences(points);
+
+    let formula = "N(x) = ";
+
+    formula += table[0][0].toFixed(4);
+
+    for (let i = 1; i < points.length; i++) {
+
+        formula += ` + (${table[0][i].toFixed(4)})`;
+
+        for (let j = 0; j < i; j++) {
+
+            formula += `(x - ${points[j].x})`;
+
+        }
+
+    }
+
+    document.getElementById(
+        "newton-result"
+    ).innerHTML = `
+
+        <div class="polynomial-box fade">
+            ${formula}
+        </div>
+
+    `;
+
+    renderDifferencesTable(table);
+
+    buildCustomGraph(
+        points,
+        "newton",
+        "newton-chart",
+        table
+    );
+
+}
+
+function buildLeastSquares() {
+
+    const points = parseCustomPoints(
+        "least-points"
+    );
+
+    renderCustomTable(
+        points,
+        "least-table"
+    );
+
+    const result =
+        leastSquares(points, 2);
+
+    renderLeastSquares(
+        result.coefficients
+    );
+
+    renderMatrix(result.X);
+
+    renderResiduals(
+        points,
+        result.coefficients
+    );
+
+    buildCustomGraph(
+        points,
+        "leastSquares",
+        "least-chart",
+        null,
+        result.coefficients
+    );
+
+}
+
+function parseCustomPoints(textareaId) {
+
+    const text = document
+        .getElementById(textareaId)
+        .value
+        .trim();
+
+    const lines = text.split("\n");
+
+    let points = [];
+
+    for (let line of lines) {
+
+        const [x, y] =
+            line.split(",").map(Number);
+
+        if (!isNaN(x) && !isNaN(y)) {
+
+            points.push({ x, y });
+
+        }
+
+    }
+
+    return points;
+
+}
+
+function renderCustomTable(points, containerId) {
+
+    let html = `
+
+        <table class="fade">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>x</th>
+                    <th>y</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+    `;
+
+    points.forEach((point, index) => {
+
+        html += `
+
+            <tr>
+                <td>${index + 1}</td>
+                <td>${point.x}</td>
+                <td>${point.y}</td>
+            </tr>
+
+        `;
+
+    });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById(
+        containerId
+    ).innerHTML = html;
+
+}
+
